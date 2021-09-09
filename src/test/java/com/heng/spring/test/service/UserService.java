@@ -11,6 +11,8 @@ public class UserService {
 
     private UserDao userDao;
 
+    private String company;
+
     public String queryUserInfo() {
         return userDao.queryUserName(uId);
     }
@@ -29,5 +31,13 @@ public class UserService {
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

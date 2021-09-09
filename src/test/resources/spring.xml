@@ -6,6 +6,11 @@
     <bean id="userService" class="com.heng.spring.test.service.UserService">
         <property name="uId" value="10001"/>
         <property name="userDao" ref="userDao"/>
+        <property name="company" value="九天凌霄"/>
     </bean>
+
+    <bean class="com.heng.spring.test.service.MyBeanFactoryPostProcessor"/>
+
+    <bean class="com.heng.spring.test.service.MyBeanPostProcessor"/>
 
 </beans>

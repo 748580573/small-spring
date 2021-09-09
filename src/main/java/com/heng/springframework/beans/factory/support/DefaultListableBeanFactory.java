@@ -3,6 +3,7 @@ package com.heng.springframework.beans.factory.support;
 import com.heng.springframework.beans.factory.BeansException;
 import com.heng.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.heng.springframework.beans.factory.config.BeanDefinition;
+import com.heng.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,4 +53,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     public String[] getBeanDefinitionNames() {
         return beanDefinitionMap.keySet().toArray(new String[0]);
     }
+
+    @Override
+    public void preInstantiateSingletons() throws BeansException {
+        beanDefinitionMap.keySet().forEach(name -> getBean(name));
+    }
+
 }
