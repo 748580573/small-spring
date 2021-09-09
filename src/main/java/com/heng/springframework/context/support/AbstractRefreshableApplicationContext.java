@@ -11,6 +11,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
     private ConfigurableListableBeanFactory beanFactory;
 
+    /**
+     * 刷新beanFactory，创建beanFactory并且加载beaenDefinition
+     */
     @Override
     protected void refreshBeanFactory() {
         ConfigurableListableBeanFactory beanFactory = createBeanFactory();
