@@ -1,11 +1,13 @@
 package com.heng.spring.test.service;
 
+import com.heng.springframework.beans.factory.DisposableBean;
+
 /**
  * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
  * 公众号：bugstack虫洞栈
  * Create by 小傅哥(fustack)
  */
-public class UserService {
+public class UserService implements DisposableBean {
 
     private String uId;
 
@@ -39,5 +41,10 @@ public class UserService {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    @Override
+    public void destory() throws Exception {
+        System.out.println("结束啦......");
     }
 }
