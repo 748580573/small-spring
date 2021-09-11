@@ -14,6 +14,11 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     private final Map<String, DisposableBean> disposableBeanMap = new HashMap<>();
 
+    /**
+     * 表示null对象。用于去除map中value为null的二义性。
+     */
+    protected static final Object NULL_OBJECT = new Object();
+
     @Override
     public Object getSingleton(String beanName) {
         return singletonObjects.get(beanName);

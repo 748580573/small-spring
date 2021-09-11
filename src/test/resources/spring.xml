@@ -9,6 +9,8 @@
         <property name="company" value="九天凌霄"/>
     </bean>
 
+    <bean id="myProxy" class="com.heng.spring.test.service.ProxyBeanFactory"/>
+
     <bean class="com.heng.spring.test.service.MyBeanFactoryPostProcessor"/>
 
     <bean class="com.heng.spring.test.service.MyBeanPostProcessor"/>
