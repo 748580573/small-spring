@@ -15,4 +15,6 @@
 
     <bean class="com.heng.spring.test.service.MyBeanPostProcessor"/>
 
+    <bean class="com.heng.spring.test.service.MyEventListener"/>
+
 </beans>

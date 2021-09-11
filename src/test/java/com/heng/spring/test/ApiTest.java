@@ -1,6 +1,7 @@
 package com.heng.spring.test;
 
 
+import com.heng.spring.test.service.MyEvent;
 import com.heng.spring.test.service.MyProxy;
 import com.heng.spring.test.service.UserService;
 import com.heng.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -20,6 +21,8 @@ public class ApiTest {
         HashMap<String,Object> map = (HashMap<String, Object>) myProxy.getProxy();
         map.keySet().forEach(key -> System.out.println(key));
         System.out.println(userService.getCompany());
+        MyEvent myEvent = new MyEvent(new Object(),1l,"hello,world");
+        applicationContext.publishEvent(myEvent);
 
     }
 }

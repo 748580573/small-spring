@@ -5,12 +5,22 @@ import com.heng.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.heng.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import com.heng.springframework.beans.factory.config.BeanPostProcessor;
 import com.heng.springframework.beans.factory.support.ApplicationContextAwareProcessor;
+import com.heng.springframework.context.ApplicationEvent;
+import com.heng.springframework.context.ApplicationListener;
 import com.heng.springframework.context.ConfigurableApplicationContext;
+import com.heng.springframework.context.event.ApplicationEventMulticaster;
+import com.heng.springframework.context.event.ContextRefreshedEvent;
+import com.heng.springframework.context.event.SimpleApplicationEventMulticaster;
 import com.heng.springframework.core.io.DefaultResourceLoader;
 
+import java.util.Collection;
 import java.util.Map;
 
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
+
+    public static final String APPLICATION_EVENT_MULTICASTER_BEAN_NAME = "applicationEventMulticaster";
+
+    private ApplicationEventMulticaster applicationEventMulticaster;
 
     @Override
     public void refresh() throws BeansException {
@@ -29,8 +39,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         // 5. BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
         registerBeanPostProcessors(beanFactory);
 
-        // 6. 提前实例化单例Bean对象
+        // 6. 初始化事件发布者
+        initApplicationEventMulticaster();
+
+        // 7. 注册事件监听器
+        registerListeners();
+
+        // 8. 提前实例化单例Bean对象
         beanFactory.preInstantiateSingletons();
+
+        // 9. 发布容器刷新完成事件
+        finishRefresh();
 
         registerShutdownHook();
     }
@@ -50,6 +69,31 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
             postProcessor.postProcessBeanFactory(beanFactory);
         }
 
+    }
+
+    private void initApplicationEventMulticaster(){
+        ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+        applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+        beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME,applicationEventMulticaster);
+    }
+
+    /**
+     * 从beanFactory中找到所有实现了ApplicationListener的bean。并将该bean注册到时间广播器中。
+     */
+    private void registerListeners() {
+        Collection<ApplicationListener> applicationListeners = getBeansOfType(ApplicationListener.class).values();
+        for (ApplicationListener listener : applicationListeners) {
+            applicationEventMulticaster.addApplicationListener(listener);
+        }
+    }
+
+    private void finishRefresh() {
+        publishEvent(new ContextRefreshedEvent(this));
+    }
+
+    @Override
+    public void publishEvent(ApplicationEvent event) {
+        applicationEventMulticaster.multicastEvent(event);
     }
 
     protected abstract void refreshBeanFactory();

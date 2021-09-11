@@ -5,6 +5,7 @@ import com.heng.springframework.beans.factory.DisposableBean;
 import com.heng.springframework.beans.factory.config.SingletonBeanRegistry;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,12 +25,13 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
         return singletonObjects.get(beanName);
     }
 
-    public void addSingleton(String beanName,Object singletonObject){
-        singletonObjects.put(beanName,singletonObject);
-    }
-
     public void registerDisposableBean(String beanName,DisposableBean bean){
         disposableBeanMap.put(beanName,bean);
+    }
+
+    @Override
+    public void registerSingleton(String beanName, Object singletonObject) {
+        singletonObjects.put(beanName,singletonObject);
     }
 
     public void destroySingletons(){

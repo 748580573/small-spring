@@ -36,7 +36,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         //缓存单例bean
         if (beanDefinition.isSingleton()){
-            addSingleton(beanName,bean);
+            registerSingleton(beanName,bean);
         }
 
         return bean;
