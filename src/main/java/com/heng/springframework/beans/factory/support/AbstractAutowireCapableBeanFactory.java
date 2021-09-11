@@ -4,9 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.heng.springframework.PropertyValues;
 import com.heng.springframework.beans.PropertyValue;
-import com.heng.springframework.beans.factory.BeansException;
-import com.heng.springframework.beans.factory.DisposableBean;
-import com.heng.springframework.beans.factory.InitializingBean;
+import com.heng.springframework.beans.factory.*;
 import com.heng.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.heng.springframework.beans.factory.config.BeanDefinition;
 import com.heng.springframework.beans.factory.config.BeanPostProcessor;
@@ -14,9 +12,6 @@ import com.heng.springframework.beans.factory.config.BeanReference;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 这里体现了类的责任分层，AbstractAutowireCapableBeanFactory只负责了创建bean的实现，不对其他的接口的实现进行负责
@@ -32,7 +27,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             bean = createBeanInstance(beanDefinition,beanName,args);
             applyPropertyValues(beanName,bean,beanDefinition);
             // 执行 Bean 的初始化方法和 BeanPostProcessor 的前置和后置处理方法
-            bean = initiallizeBean(beanName,bean,beanDefinition);
+            bean = initializeBean(beanName,bean,beanDefinition);
         }catch (Exception e){
             throw new BeansException("Instantiation of bean failed", e);
         }
@@ -74,7 +69,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return instantiationStrategy.instantiate(beanDefinition,beanName,constructor,args);
     }
 
-    private Object initiallizeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+
+        // invokeAwareMethods
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if (bean instanceof BeanClassLoaderAware){
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
+            }
+            if (bean instanceof BeanNameAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+        }
 
         // 1. 执行 BeanPostProcessor Before 处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean,beanName);

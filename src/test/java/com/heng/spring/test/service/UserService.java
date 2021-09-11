@@ -1,13 +1,13 @@
 package com.heng.spring.test.service;
 
-import com.heng.springframework.beans.factory.DisposableBean;
+import com.heng.springframework.beans.factory.*;
 
 /**
  * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
  * 公众号：bugstack虫洞栈
  * Create by 小傅哥(fustack)
  */
-public class UserService implements DisposableBean {
+public class UserService implements InitializingBean, DisposableBean, BeanNameAware, BeanFactoryAware {
 
     private String uId;
 
@@ -45,6 +45,21 @@ public class UserService implements DisposableBean {
 
     @Override
     public void destory() throws Exception {
-        System.out.println("结束啦......");
+        System.out.println("执行销毁方法......");
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("beanName为：" + name);
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        System.out.println("回去到beanFactory");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("执行初始化方法");
     }
 }
