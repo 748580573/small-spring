@@ -35,6 +35,13 @@ public class ApiTest {
     }
 
     @Test
+    public void test_component(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:scan-conponent.xml");
+        Say say = applicationContext.getBean("userService",UserService.class);
+        say.say();
+    }
+
+    @Test
     public void aop_test(){
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         Say userService = applicationContext.getBean("userService",UserService.class);

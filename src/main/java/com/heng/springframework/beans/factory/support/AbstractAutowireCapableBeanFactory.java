@@ -177,7 +177,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             return;
         }
 
-        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestoryMethodName())){
+        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())){
             registerDisposableBean(beanName,new DisposableBeanAdapter(bean,beanName,beanDefinition));
         }
     }
