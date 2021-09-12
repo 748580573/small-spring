@@ -1,14 +1,22 @@
 package com.heng.spring.test;
 
 
+import com.heng.spring.test.aop.MyServiceInterceptor;
 import com.heng.spring.test.service.MyEvent;
 import com.heng.spring.test.service.MyProxy;
+import com.heng.spring.test.service.Say;
 import com.heng.spring.test.service.UserService;
+import com.heng.springframework.aop.AdvisedSupport;
+import com.heng.springframework.aop.TargetSource;
+import com.heng.springframework.aop.aspectj.AspectJExpressionPointcut;
+import com.heng.springframework.aop.fremework.Cglib2AopProxy;
+import com.heng.springframework.aop.fremework.JdkDynamicAopProxy;
 import com.heng.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.heng.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import com.heng.springframework.context.support.ClassPathXmlApplicationContext;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class ApiTest {
@@ -24,5 +32,37 @@ public class ApiTest {
         MyEvent myEvent = new MyEvent(new Object(),1l,"hello,world");
         applicationContext.publishEvent(myEvent);
 
+    }
+
+    @Test
+    public void aop_test(){
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.heng.spring..*.*(..))");
+        Class<?> clazz = Say.class;
+        System.out.println(pointcut.matches(clazz));
+        try {
+            Method method = Say.class.getMethod("say");
+            System.out.println(pointcut.matches(method,null));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void dynamic_test(){
+        UserService userService = new UserService();
+
+        //组装代理信息
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        advisedSupport.setTargetSource(new TargetSource(userService));
+        advisedSupport.setMethodInterceptor(new MyServiceInterceptor());
+
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.heng.spring..*.*(..))");
+        advisedSupport.setMethodMatcher(pointcut);
+
+        Say jdk_dynamic_object = (Say) new JdkDynamicAopProxy(advisedSupport).getProxy();
+        jdk_dynamic_object.say();
+
+        Say cglib_dynamic_objcet = (Say) new Cglib2AopProxy(advisedSupport).getProxy();
+        cglib_dynamic_objcet.say();
     }
 }

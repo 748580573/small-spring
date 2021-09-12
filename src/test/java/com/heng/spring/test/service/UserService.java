@@ -7,7 +7,7 @@ import com.heng.springframework.beans.factory.*;
  * 公众号：bugstack虫洞栈
  * Create by 小傅哥(fustack)
  */
-public class UserService implements InitializingBean, DisposableBean, BeanNameAware, BeanFactoryAware {
+public class UserService implements InitializingBean, DisposableBean, BeanNameAware, BeanFactoryAware,Say {
 
     private String uId;
 
@@ -61,5 +61,10 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
     @Override
     public void afterPropertiesSet() throws Exception {
         System.out.println("执行初始化方法");
+    }
+
+    @Override
+    public void say() {
+        System.out.println("hello,world");
     }
 }
