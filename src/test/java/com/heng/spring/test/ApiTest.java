@@ -36,15 +36,9 @@ public class ApiTest {
 
     @Test
     public void aop_test(){
-        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.heng.spring..*.*(..))");
-        Class<?> clazz = Say.class;
-        System.out.println(pointcut.matches(clazz));
-        try {
-            Method method = Say.class.getMethod("say");
-            System.out.println(pointcut.matches(method,null));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        Say userService = applicationContext.getBean("userService",UserService.class);
+        userService.say();
     }
 
     @Test
