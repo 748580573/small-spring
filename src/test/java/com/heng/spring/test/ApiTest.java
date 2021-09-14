@@ -45,7 +45,7 @@ public class ApiTest {
 
     @Test
     public void aop_test(){
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:aop.xml");
         Say userService = applicationContext.getBean("userService",UserService.class);
         userService.say();
     }
