@@ -11,6 +11,9 @@ import com.heng.springframework.util.StringValueResolver;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * 实现BeanFactoryPostProcessor接口是为了在普通bean被实例化之前PropertyPlaceholderConfigurer被实例化
+ */
 public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
 
     /**

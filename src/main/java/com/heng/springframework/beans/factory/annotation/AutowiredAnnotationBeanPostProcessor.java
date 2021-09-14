@@ -11,6 +11,9 @@ import com.heng.springframework.util.ClassUtils;
 
 import java.lang.reflect.Field;
 
+/**
+ * 该BeanPostProcessor专门用来处理一些注解注入bean相关的功能
+ */
 public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
 
     private ConfigurableListableBeanFactory beanFactory;
