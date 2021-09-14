@@ -1,5 +1,6 @@
 package com.heng.springframework.aop.fremework.autoproxy;
 
+import com.heng.springframework.PropertyValues;
 import com.heng.springframework.aop.*;
 import com.heng.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import com.heng.springframework.aop.fremework.ProxyFactory;
@@ -11,7 +12,6 @@ import com.heng.springframework.beans.factory.support.DefaultListableBeanFactory
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
@@ -64,6 +64,11 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
             return new ProxyFactory(advisedSupport).getProxy();
         }
         return null;
+    }
+
+    @Override
+    public PropertyValues postProcessPropertyValues(PropertyValues pvs, Object bean, String beanName) throws BeansException {
+        return pvs;
     }
 
     private boolean isInfrastructureClass(Class<?> beanClass) {

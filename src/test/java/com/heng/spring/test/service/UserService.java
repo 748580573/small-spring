@@ -1,6 +1,7 @@
 package com.heng.spring.test.service;
 
 import com.heng.springframework.beans.factory.*;
+import com.heng.springframework.beans.factory.annotation.Value;
 import com.heng.springframework.stereotype.Component;
 
 /**
@@ -16,6 +17,9 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
     private UserDao userDao;
 
     private String company;
+
+    @Value("${name}")
+    private String name;
 
     public String queryUserInfo() {
         return userDao.queryUserName(uId);
@@ -43,6 +47,14 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

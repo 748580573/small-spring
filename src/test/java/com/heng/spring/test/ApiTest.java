@@ -31,6 +31,7 @@ public class ApiTest {
         System.out.println(userService.getCompany());
         MyEvent myEvent = new MyEvent(new Object(),1l,"hello,world");
         applicationContext.publishEvent(myEvent);
+        System.out.println(userService.getName());
 
     }
 
