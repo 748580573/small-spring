@@ -1,6 +1,7 @@
 package com.heng.spring.test.service;
 
 import com.heng.springframework.beans.factory.*;
+import com.heng.springframework.beans.factory.annotation.Autowired;
 import com.heng.springframework.beans.factory.annotation.Value;
 import com.heng.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
 
     private String uId;
 
+    @Autowired
     private UserDao userDao;
 
     private String company;

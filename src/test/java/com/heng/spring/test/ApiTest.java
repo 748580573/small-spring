@@ -38,8 +38,9 @@ public class ApiTest {
     @Test
     public void test_component(){
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:scan-conponent.xml");
-        Say say = applicationContext.getBean("userService",UserService.class);
-        say.say();
+        UserService userService = applicationContext.getBean("userService",UserService.class);
+        System.out.println(userService.getName());
+        System.out.println(userService.getUserDao().queryUserName("10002"));
     }
 
     @Test
