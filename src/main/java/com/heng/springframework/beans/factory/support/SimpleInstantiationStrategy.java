@@ -10,7 +10,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
     public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor ctor, Object[] args) {
         Class<?> clazz = beanDefinition.getBeanClass();
         try {
-            if (null == ctor){
+            if (null != ctor){
                 return clazz.getDeclaredConstructor(ctor.getParameterTypes()).newInstance(args);
             }else {
                 return clazz.getDeclaredConstructor().newInstance();

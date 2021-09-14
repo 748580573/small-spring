@@ -4,7 +4,9 @@ import com.heng.springframework.beans.factory.BeansException;
 import com.heng.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.heng.springframework.beans.factory.config.BeanDefinition;
 import com.heng.springframework.beans.factory.config.BeanPostProcessor;
+import org.aspectj.lang.annotation.Aspect;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +52,19 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         });
         return result;
     }
+
+    @Override
+    public <T> Map<String,T> getBeansOfAnnotation(Class annotation) throws BeansException{
+        Map<String,T> result = new HashMap<>();
+        beanDefinitionMap.forEach((beanName, beanDefinition) -> {
+            Class beanClass = beanDefinition.getBeanClass();
+            if (beanClass.isAnnotationPresent(annotation)){
+                result.put(beanName,(T)getBean(beanName));
+            }
+        });
+        return result;
+    }
+
 
     @Override
     public String[] getBeanDefinitionNames() {

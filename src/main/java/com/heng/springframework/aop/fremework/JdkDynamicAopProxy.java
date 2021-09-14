@@ -1,6 +1,7 @@
 package com.heng.springframework.aop.fremework;
 
 import com.heng.springframework.aop.AdvisedSupport;
+import com.heng.springframework.util.ClassUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 
 import java.lang.reflect.InvocationHandler;
@@ -26,8 +27,8 @@ public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         //这里使用apspect提供的方法匹配，来匹配方法是否符合切点表达式的规则。
-        if (advised.getMethodMatcher().matches(method, advised.getTargetSource().getTarget().getClass())) {
-            MethodInterceptor methodInterceptor = advised.getMethodInterceptor();
+        if (advised.getAopObject().getPointcut().getMethodMatcher().matches(method, advised.getTargetSource().getTarget().getClass())) {
+            MethodInterceptor methodInterceptor = (MethodInterceptor) advised.getAopObject().getAdvice();
             //MethodInterceptor回去MethodInvocation提供的proceed方法
             return methodInterceptor.invoke(new ReflectiveMethodInvocation(advised.getTargetSource().getTarget(), method, args));
         }

@@ -1,5 +1,7 @@
 package com.heng.springframework.aop;
 
+import com.heng.springframework.util.ClassUtils;
+
 public class TargetSource {
 
     private final Object target;
@@ -9,6 +11,9 @@ public class TargetSource {
     }
 
     public Class<?>[] getTargetClass(){
+        if (ClassUtils.isCglibProxyClass(target.getClass())){
+            return this.target.getClass().getSuperclass().getInterfaces();
+        }
         return this.target.getClass().getInterfaces();
     }
 

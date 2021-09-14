@@ -8,23 +8,29 @@
 
     <context:component-scan base-package="com.heng.spring.test"/>
 
-    <bean class="com.heng.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
-
-    <bean class="com.heng.springframework.beans.factory.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:test.properties"/>
+    <bean id="userService" class="com.heng.spring.test.service.UserService">
+        <property name="uId" value="10001"/>
+<!--        <property name="userDao" ref="userDao"/>-->
+        <property name="company" value="九天凌霄"/>
+        <property name="name" value=""/>
     </bean>
+<!--    <bean class="com.heng.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>-->
 
-    <bean id="beforeAdvice" class="com.heng.spring.test.aop.UserServiceBeforeAdvice"/>
+<!--    <bean class="com.heng.springframework.beans.factory.PropertyPlaceholderConfigurer">-->
+<!--        <property name="location" value="classpath:test.properties"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="beforeAdvice" class="com.heng.spring.test.aop.UserServiceBeforeAdvice"/>-->
 
 
-    <bean id="methodInterceptor" class="com.heng.springframework.aop.fremework.MethodBeforeAdviceInterceptor">
-        <property name="advice" ref="beforeAdvice"/>
-    </bean>
+<!--    <bean id="methodInterceptor" class="com.heng.springframework.aop.fremework.MethodBeforeAdviceInterceptor">-->
+<!--        <property name="advice" ref="beforeAdvice"/>-->
+<!--    </bean>-->
 
-    <bean id="pointcutAdvisor" class="com.heng.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* com.heng.spring.test.service.Say.*(..))"/>
-        <property name="advice" ref="methodInterceptor"/>
-    </bean>
+<!--    <bean id="pointcutAdvisor" class="com.heng.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">-->
+<!--        <property name="expression" value="execution(* com.heng.spring.test.service.Say.*(..))"/>-->
+<!--        <property name="advice" ref="methodInterceptor"/>-->
+<!--    </bean>-->
 
-    <bean class="com.heng.springframework.aop.fremework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+<!--    <bean class="com.heng.springframework.aop.fremework.autoproxy.DefaultAdvisorAutoProxyCreator"/>-->
 </beans>

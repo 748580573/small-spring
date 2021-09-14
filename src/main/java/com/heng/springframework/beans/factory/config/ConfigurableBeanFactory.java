@@ -1,5 +1,7 @@
 package com.heng.springframework.beans.factory.config;
 
+import com.heng.springframework.aop.AopObject;
+import com.heng.springframework.aop.PointcutAdvisor;
 import com.heng.springframework.beans.factory.HierarchicalBeanFactory;
 import com.heng.springframework.util.StringValueResolver;
 
@@ -10,6 +12,8 @@ public interface ConfigurableBeanFactory  extends HierarchicalBeanFactory, Singl
     String SCOPE_PROTOTYPE = "prototype";
 
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
+
+    void addPointcutAdvisor(AopObject aopObject);
 
     void destroySingletons();
 

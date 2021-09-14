@@ -3,19 +3,22 @@ package com.heng.springframework.beans.factory.support;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.heng.springframework.PropertyValues;
+import com.heng.springframework.aop.*;
+import com.heng.springframework.aop.fremework.ProxyFactory;
 import com.heng.springframework.beans.PropertyValue;
 import com.heng.springframework.beans.factory.*;
 import com.heng.springframework.beans.factory.config.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * 这里体现了类的责任分层，AbstractAutowireCapableBeanFactory只负责了创建bean的实现，不对其他的接口的实现进行负责
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
 
-    private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
+    private InstantiationStrategy instantiationStrategy = new SimpleInstantiationStrategy();
 
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
@@ -37,6 +40,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }catch (Exception e){
             throw new BeansException("Instantiation of bean failed,beanName=" + beanName, e);
         }
+
+        bean = aopBean(beanName,bean,beanDefinition);
         // 注册实现了 DisposableBean 接口的 Bean 对象
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
 
@@ -46,6 +51,22 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
 
         return bean;
+    }
+
+    private Object aopBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        Object result = bean;
+        List<AopObject> pointcutAdvisors = getPointcutAdvisors();
+        for (AopObject aopObject : pointcutAdvisors){
+            Pointcut pointcut = aopObject.getPointcut();
+            if (pointcut.getClassFilter().matches(bean.getClass())){
+                AdvisedSupport advisedSupport = new AdvisedSupport();
+                TargetSource targetSource = new TargetSource(bean);
+                advisedSupport.setTargetSource(targetSource);
+                advisedSupport.setAopObject(aopObject);
+                result =  new ProxyFactory(advisedSupport).getProxy();
+            }
+        }
+        return result;
     }
 
     protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {

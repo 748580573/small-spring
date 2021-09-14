@@ -3,6 +3,7 @@ package com.heng.springframework.context.support;
 import com.heng.springframework.beans.factory.BeansException;
 
 import java.beans.Beans;
+import java.util.Map;
 
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext{
 

@@ -1,5 +1,9 @@
 package com.heng.springframework.context.support;
 
+import com.heng.springframework.aop.AspectAopObject;
+import com.heng.springframework.aop.Pointcut;
+import com.heng.springframework.aop.PointcutAdvisor;
+import com.heng.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import com.heng.springframework.aop.fremework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import com.heng.springframework.beans.factory.BeansException;
 import com.heng.springframework.beans.factory.ConfigurableListableBeanFactory;
@@ -13,7 +17,10 @@ import com.heng.springframework.context.event.ApplicationEventMulticaster;
 import com.heng.springframework.context.event.ContextRefreshedEvent;
 import com.heng.springframework.context.event.SimpleApplicationEventMulticaster;
 import com.heng.springframework.core.io.DefaultResourceLoader;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
@@ -40,6 +47,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         // 5. BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
         registerBeanPostProcessors(beanFactory);
 
+        registerPointcutAdvisors(beanFactory);
+
         // 6. 初始化事件发布者
         initApplicationEventMulticaster();
 
@@ -53,6 +62,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         finishRefresh();
 
         registerShutdownHook();
+    }
+
+    private void registerPointcutAdvisors(ConfigurableListableBeanFactory beanFactory) {
+        Map<String, Object> aspectMap = beanFactory.getBeansOfAnnotation(Aspect.class);
+        for (Object bean : aspectMap.values()){
+            AspectAopObject aopObject = new AspectAopObject(bean);
+            beanFactory.addPointcutAdvisor(aopObject);
+        }
     }
 
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
@@ -124,6 +141,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     @Override
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
         return getBeanFactory().getBeansOfType(type);
+    }
+
+    @Override
+    public <T> Map<String, T> getBeansOfAnnotation(Class annotation) throws BeansException {
+        return getBeanFactory().getBeansOfAnnotation(annotation);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.heng.springframework.beans.factory.support;
 
+import com.heng.springframework.aop.AopObject;
+import com.heng.springframework.aop.PointcutAdvisor;
 import com.heng.springframework.beans.factory.BeanFactory;
 import com.heng.springframework.beans.factory.BeansException;
 import com.heng.springframework.beans.factory.ConfigurableListableBeanFactory;
@@ -21,6 +23,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
     private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
+
+    private final List<AopObject> pointcutAdvisors = new ArrayList<>();
 
 
     @Override
@@ -73,6 +77,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     }
 
     @Override
+    public void addPointcutAdvisor(AopObject aopObject){
+        pointcutAdvisors.remove(aopObject);
+        pointcutAdvisors.add(aopObject);
+    }
+
+    @Override
     public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
         this.embeddedValueResolvers.add(valueResolver);
     }
@@ -88,6 +98,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
     public List<BeanPostProcessor> getBeanPostProcessors(){
         return this.beanPostProcessors;
+    }
+
+    public List<AopObject>  getPointcutAdvisors(){
+        return this.pointcutAdvisors;
     }
 
     public ClassLoader getBeanClassLoader() {

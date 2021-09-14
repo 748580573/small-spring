@@ -10,7 +10,7 @@ import com.heng.springframework.stereotype.Component;
  * 公众号：bugstack虫洞栈
  * Create by 小傅哥(fustack)
  */
-@Component
+//@Component
 public class UserService implements InitializingBean, DisposableBean, BeanNameAware, BeanFactoryAware,Say {
 
     private String uId;

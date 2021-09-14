@@ -15,6 +15,8 @@ public class AdvisedSupport {
     // 方法匹配器(检查目标方法是否符合通知条件)
     private MethodMatcher methodMatcher;
 
+    private AopObject aopObject;
+
     public boolean isProxyTargetClass() {
         return proxyTargetClass;
     }
@@ -46,4 +48,11 @@ public class AdvisedSupport {
         this.methodMatcher = methodMatcher;
     }
 
+    public AopObject getAopObject() {
+        return aopObject;
+    }
+
+    public void setAopObject(AopObject aopObject) {
+        this.aopObject = aopObject;
+    }
 }
