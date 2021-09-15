@@ -1,6 +1,9 @@
 package com.heng.springframework.context.support;
 
+import cn.hutool.core.util.StrUtil;
+import com.heng.springframework.aop.fremework.autoproxy.AopAdvisorAutoProxyBeanFactorPostProcessor;
 import com.heng.springframework.beans.factory.ConfigurableListableBeanFactory;
+import com.heng.springframework.beans.factory.config.BeanDefinition;
 import com.heng.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 /**
@@ -17,6 +20,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
     @Override
     protected void refreshBeanFactory() {
         ConfigurableListableBeanFactory beanFactory = createBeanFactory();
+        addAopProxyDefinition(beanFactory);
         loadBeanDefinition(beanFactory);
         this.beanFactory = beanFactory;
     }
@@ -34,5 +38,11 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
     protected ConfigurableListableBeanFactory getBeanFactory(){
         return this.beanFactory;
+    }
+
+    private void addAopProxyDefinition(ConfigurableListableBeanFactory beanFactory){
+        BeanDefinition beanDefinition = new BeanDefinition(AopAdvisorAutoProxyBeanFactorPostProcessor.class);
+        beanFactory.registerBeanDefinition(StrUtil.lowerFirst(AopAdvisorAutoProxyBeanFactorPostProcessor.class.getSimpleName()),beanDefinition);
+
     }
 }
