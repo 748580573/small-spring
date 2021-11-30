@@ -28,7 +28,7 @@ public class AopAdvisorAutoProxyBeanPostProcessor implements InitializingBean,Be
             Pointcut pointcut = aopObject.getPointcut();
             if (pointcut.getClassFilter().matches(bean.getClass())){
                 AdvisedSupport advisedSupport = new AdvisedSupport();
-                TargetSource targetSource = new TargetSource(bean);
+                TargetSource targetSource = new TargetSource(result);
                 advisedSupport.setTargetSource(targetSource);
                 advisedSupport.setAopObject(aopObject);
                 result =  new ProxyFactory(advisedSupport).getProxy();
