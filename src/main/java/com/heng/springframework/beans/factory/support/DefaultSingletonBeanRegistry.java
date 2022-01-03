@@ -40,12 +40,15 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
             if (singleBean == null){
                 ObjectFactory<?> singleBeanFactory = singletonFactories.get(beanName);
-                singleBean = singleBeanFactory.getObject();
-                earlySingletonObjects.put(beanName,singleBean);
-                singletonFactories.remove(beanName);
+                if (singleBeanFactory != null){
+                    singleBean = singleBeanFactory.getObject();
+                    // 把三级缓存中的代理对象中的真实对象获取出来，放入二级缓存中,提前暴露未未填充属性的bean对象
+                    earlySingletonObjects.put(beanName, singleBean);
+                    singletonFactories.remove(beanName);
+                }
             }
         }
-        return singletonObjects.get(beanName);
+        return singleBean;
     }
 
     public void registerDisposableBean(String beanName,DisposableBean bean){

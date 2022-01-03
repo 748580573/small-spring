@@ -2,6 +2,8 @@ package com.heng.spring.test;
 
 
 import com.heng.spring.test.aop.MyServiceInterceptor;
+import com.heng.spring.test.recycle.A;
+import com.heng.spring.test.recycle.B;
 import com.heng.spring.test.service.MyEvent;
 import com.heng.spring.test.service.MyProxy;
 import com.heng.spring.test.service.Say;
@@ -48,6 +50,12 @@ public class ApiTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:aop.xml");
         Say userService = applicationContext.getBean("userService",UserService.class);
         userService.say();
+    }
+
+    @Test
+    public void recycleTest(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:recycle.xml");
+        B b = applicationContext.getBean(B.class);
     }
 
     @Test

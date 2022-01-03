@@ -64,7 +64,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // 判断 SCOPE_SINGLETON、SCOPE_PROTOTYPE
         Object exposedObject = bean;
         if (beanDefinition.isSingleton()) {
-            // 获取代理对象
+            // 获取代理对象,当属性的循环依赖都被处理完成后，再回到这里来初始化本对象
             exposedObject = getSingleton(beanName);
             registerSingleton(beanName, exposedObject);
         }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="A" class="com.heng.spring.test.recycle.A">
+        <property name="b" ref="B"/>
+
+    </bean>
+
+    <bean id="B" class="com.heng.spring.test.recycle.B">
+        <property name="a" ref="A"/>
+    </bean>
+
+</beans>
