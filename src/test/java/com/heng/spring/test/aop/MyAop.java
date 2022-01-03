@@ -11,9 +11,9 @@ public class MyAop {
 
     @Around("execution(* com.heng.spring.test.service.Say.*(..))")
     public Object pointcut(MethodInvocation invocation) throws Throwable {
-        System.out.println("执行前");
+        System.out.println("楷楷你好啊");
         Object proceed = invocation.proceed();
-        System.out.println("执行后");
+        System.out.println("楷楷再见。 ");
         return proceed;
     }
 }
